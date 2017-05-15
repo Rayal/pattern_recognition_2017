@@ -38,3 +38,7 @@ captures/
 
 # Keystore files
 *.jks
+
+# VIM files
+*.swp
+*.swo
