@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-#from sys import argv
+from sys import argv
 
 img = cv2.imread(argv[1])
 
