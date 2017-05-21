@@ -2,6 +2,8 @@ from __future__ import print_function
 import shutil
 import os.path
 import tensorflow as tf
+
+from tensorflow.python.tools import freeze_graph
 from tensorflow.examples.tutorials.mnist import input_data
 
 EXPORT_DIR = './model'
@@ -101,7 +103,7 @@ correct_pred = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
 # Initializing the variables
-init = tf.initialize_all_variables()
+init = tf.global_variables_initializer()
 
 # Launch the graph
 with tf.Session() as sess:
@@ -175,6 +177,8 @@ with g.as_default():
 
     graph_def = g.as_graph_def()
     tf.train.write_graph(graph_def, EXPORT_DIR, 'mnist_model_graph.pb', as_text=False)
+    tf.train.Saver().save(sess, EXPORT_DIR + '/tfdroid.ckpt')
+    freeze_graph.freeze_graph(EXPORT_DIR + "/mnist_model_graph.pb", EXPORT_DIR, False, EXPORT_DIR + "/tfdroid.ckpt", "O", 'save/restore_all', 'save/Const:0', 'frozen.pb', True, "")
 
     # Test trained model
     y_train = tf.placeholder("float", [None, 10])
